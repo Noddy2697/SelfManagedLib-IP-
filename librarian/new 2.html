@@ -1,0 +1,178 @@
+
+<input type="hidden" value="http://yourprogramming.com/library/" id="url">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="yourprogramming.com">
+    <title>Login | yourprogramming.com</title>
+    <link href="http://yourprogramming.com/library/libs/css/style.css" rel="stylesheet">
+    <link href="http://yourprogramming.com/library/libs/css/style-responsive.css" rel="stylesheet">
+	<link rel="shortcut icon" href="http://yourprogramming.com/library/images/yourprogramming.com_favicon.JPG" type="image/*">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="login-body" style="background: #3b5998 url(http://yourprogramming.com/library/images/login-bg.jpg) no-repeat fixed;background-size:cover;">
+
+<div class="container">
+
+    <form action="http://yourprogramming.com/library/Login/checkLogin/" class="form-signin" method="post" accept-charset="utf-8">
+        <div class="form-signin-heading text-center"><center>
+            <img src="http://yourprogramming.com/library/images/yourprogramming.com.JPG" alt="yourprogramming.com" 
+				style="max-width: 100%;"/><h4 class='text-success'>Logged out successfully!<h4></center>
+        </div>
+        <div class="login-wrap">
+            <input type="text" class="form-control username" placeholder="User e-Mail" id="username" name="username" autofocus 
+			value="">
+            <input type="password" class="form-control password" placeholder="Password" id="password" name="password">
+
+            <button class="btn btn-lg btn-login btn-block" type="submit">
+                <i class="fa fa-arrow-right"> Login</i>
+            </button>
+
+            <div class="registration">
+                Not a member yet?
+                <a class="" href="http://yourprogramming.com/library/Login/register/">
+                    Sign-up
+                </a><br>
+                <a data-toggle="modal" href="#myModal"> Forgot Password?</a>
+            </div>
+			
+			
+			<div class="table-responsive">
+              
+                    <table class="table table-bordered table-striped table-condensed ">
+                        <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Password</th>
+                            <th>Role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="pointer">
+                            <td class="username">admin@email.com</td>
+                            <td class="password">123</td>
+                            <td class="type">Admin</td>
+                        </tr>
+						<tr class="pointer">
+                            <td class="username">manager@email.com</td>
+                            <td class="password">123</td>
+                            <td class="type">Manager</td>
+                        </tr>
+						<tr class="pointer">
+                            <td class="username">member@email.com</td>
+                            <td class="password">123</td>
+                            <td class="type">Member</td>
+                        </tr>
+                        </tbody>
+                    </table>
+            </div>
+	
+        </div>
+
+        <!-- Modal for forgot password -->
+        <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="background:#a28e84">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Forgot Password ?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Enter your e-mail address below to reset your password.</p>
+                        <input type="text" id="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
+
+                    </div>
+                    <div class="modal-footer">
+                        <span class="forgot_result send_result"></span>
+                        <button class="btn btn-primary send_password" type="button">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<script src="http://yourprogramming.com/library/libs/js/jquery-1.10.2.min.js"></script>
+<script src="http://yourprogramming.com/library/libs/js/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="http://yourprogramming.com/library/libs/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="http://yourprogramming.com/library/libs/js/bootstrap.min.js"></script>
+<script src="http://yourprogramming.com/library/libs/js/modernizr.min.js"></script>
+<script src="http://yourprogramming.com/library/libs/js/jquery.nicescroll.js"></script>
+
+<!--common scripts for all pages-->
+<script src="http://yourprogramming.com/library/libs/js/scripts.js"></script>
+<script>
+$(function(){
+	var url = $("#url").val();
+	//check input field empty or not
+	$(".form-signin").on('submit',function(){
+		if($('.username').val().length<1){
+			$('.username').css('border','1px solid red');
+			return false;
+		}
+		if($('.password').val().length<1){
+			$('.password').css('border','1px solid red');
+			return false;
+		}
+	});
+	//check email 
+	$("#email").keyup(function(){
+		var keyword = $(this).val();
+		$.ajax({
+			type: "POST",
+			url: url+"Login/check_email_password_forgot",
+			data:{keyword: keyword },
+			success: function(result){
+				$(".forgot_result").html(result)
+			},
+			error: function (request, status, error) {
+				alert('Execution failed!!');
+			}
+		});
+	});
+	
+	//Send password to email
+	$(".send_password").click(function(){
+		var email = $('#email').val();
+		$.ajax({
+			type: "POST",
+			url: url+"Login/send_password",
+			data:{email: email },
+			success: function(result){
+				$(".send_result").html(result)
+			},
+			error: function (request, status, error) {
+				alert('Execution failed!!');
+			}
+		});
+	});
+	
+	$(".username").click(function(){
+	//alert($(this).text());
+		if($(this).text()=='admin@email.com'){
+			$("#username").val('admin@email.com');
+			$("#password").val('123');
+		}else if($(this).text()=='manager@email.com'){
+			$("#username").val('manager@email.com');
+			$("#password").val('123');
+		}else if($(this).text()=='member@email.com'){
+			$("#username").val('member@email.com');
+			$("#password").val('123');
+		}
+		
+	});
+	
+})
+</script>
+</body>
+</html>
+
