@@ -1,2 +1,3 @@
 # SelfManagedLib-IP-
 integrated project (college project)
+FIRST unzip qr.7z folder and then run this project using wamp server localhost.....
